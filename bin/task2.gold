@@ -1,0 +1,62 @@
+using gold.**
+
+procedure main(args:String[]) begin
+	GAutomataFrame.show(createAutomaton())
+ end
+
+function createAutomaton():IAutomaton
+
+	begin
+		
+		Q := {
+				"initial",
+				"cpar",
+				"apar",
+				"cimpar",
+				"aimpar",
+				"timpar"
+			}
+		Σ := {'c', 'a', 'h', 't'}
+		q := "initial"
+		F := {
+				"cpar",
+				"apar",
+				"initial"
+			}
+ 
+ 		return GDeterministicAutomaton(Q, Σ, q, F, δ)
+ 		
+	end
+
+function δ(state, character) 
+	begin
+
+		// Impares
+		if state=="initial" and character=='c' then return "cpar"
+		elseif state=="initial" and character!='c' then return "initial"
+			
+		elseif state=="cpar" and character=='a' then return "apar"	
+		elseif state=="cpar" and character=='c' then return "cpar"	
+		elseif state=="cpar" and character!='a' and character!='c' then return "initial"
+			
+		elseif state=="apar" and character=='t' then return "timpar"	
+		elseif state=="apar" and character=='c' then return "cpar"	
+		elseif state=="apar" and character!='t' and character!='c' then return "initial"
+		
+		// Pares
+		elseif state=="timpar" and character=='c' then return "cimpar"
+		elseif state=="timpar" and character!='c' then return "timpar"
+			
+		elseif state=="cimpar" and character=='a' then return "aimpar"	
+		elseif state=="cimpar" and character=='c' then return "cimpar"	
+		elseif state=="cimpar" and character!='a' and character!='c' then return "timpar"
+			
+		elseif state=="aimpar" and character=='t' then return "initial"	
+		elseif state=="aimpar" and character=='c' then return "cimpar"	
+		elseif state=="aimpar" and character!='t' and character!='c' then return "timpar"
+		
+
+			
+			
+	end
+end

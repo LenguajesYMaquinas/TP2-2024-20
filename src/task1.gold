@@ -1,0 +1,42 @@
+using gold.**
+
+procedure main(args:String[]) begin
+	GAutomataFrame.show(createAutomaton())
+ end
+
+function createAutomaton():IAutomaton
+
+	begin
+		
+		Q := {'<', '>', '='}×(('0'‥'9')∪{"10"})×{
+				"initial",
+				"d1",
+				"bop1",
+				"dn",
+				"bopn",
+				"err"
+			}
+		Σ := ('0'‥'9')∪{'<', '>', '='}
+		q := ⟨'=', "10", "initial"⟩
+		F := {'<', '>', '='}×(('0'‥'9')∪{"10"})×{"dn"}
+ 
+ 		return GDeterministicAutomaton(Q, Σ, q, F, δ)
+ 		
+	end
+
+function δ(⟨simbolo, anterior, state⟩, character) 
+	begin
+		
+		numbersSet := ('0'‥'9')
+		comparatorsSet := {'=', '<', '>'}
+
+		if state=="initial" and character∈numbersSet then return ⟨simbolo, character, "d1"⟩
+		elseif state=="d1" and character∈comparatorsSet then return ⟨character, anterior, "bop1"⟩
+		elseif state=="bop1" and character∈numbersSet and ((simbolo=='<' and Integer.parseInt(String.valueOf(anterior)) < Integer.parseInt(String.valueOf(character))) or (simbolo=='>' and Integer.parseInt(String.valueOf(anterior)) > Integer.parseInt(String.valueOf(character))) or (simbolo=='=' and Integer.parseInt(String.valueOf(anterior)) == Integer.parseInt(String.valueOf(character)))) then return ⟨simbolo, character, "dn"⟩
+		elseif state=="dn" and character∈comparatorsSet then return ⟨character, anterior, "bopn"⟩
+		elseif state=="bopn" and character∈numbersSet and ((simbolo=='<' and Integer.parseInt(String.valueOf(anterior)) < Integer.parseInt(String.valueOf(character))) or (simbolo=='>' and Integer.parseInt(String.valueOf(anterior)) > Integer.parseInt(String.valueOf(character))) or (simbolo=='=' and Integer.parseInt(String.valueOf(anterior)) == Integer.parseInt(String.valueOf(character)))) then return ⟨simbolo, character, "dn"⟩
+		else return ⟨'=', "10", "err"⟩
+			
+			
+	end
+end
